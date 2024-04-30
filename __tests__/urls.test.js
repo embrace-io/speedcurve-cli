@@ -2,7 +2,7 @@ const SpeedCurve = require("../dist");
 const request = require("request-promise");
 const SPEEDCURVE_API_KEY = "abc123";
 
-test("SpeedCurve.urls.create()", async () => {
+test("SpeedCurve.urls.create() with basic options", async () => {
   request.post.mockResolvedValueOnce({
     status: "success",
     message: "Success!",
@@ -17,6 +17,44 @@ test("SpeedCurve.urls.create()", async () => {
 
   expect(response.status).toEqual("success");
   expect(request.post.mock.calls[0][0].form.site_id).toEqual("326");
+  expect(request.post.mock.calls[0][0].form.url).toEqual("https://speedcurve.com/");
+  expect(request.post.mock.calls[0][0].form.label).toEqual("Home");
+});
+
+test("SpeedCurve.urls.create() with script option", async () => {
+  request.post.mockResolvedValueOnce({
+    status: "success",
+    message: "Success!",
+    url_id: 8082,
+  });
+
+  const response = await SpeedCurve.urls.create(SPEEDCURVE_API_KEY, {
+    siteId: 326,
+    url: "https://speedcurve.com/",
+    script: "navigate https://speedcurve.com",
+  });
+
+  expect(response.status).toEqual("success");
+  expect(request.post.mock.calls[0][0].form.script).toEqual("navigate https://speedcurve.com");
+});
+
+test("SpeedCurve.urls.create() with username and password options", async () => {
+  request.post.mockResolvedValueOnce({
+    status: "success",
+    message: "Success!",
+    url_id: 8083,
+  });
+
+  const response = await SpeedCurve.urls.create(SPEEDCURVE_API_KEY, {
+    siteId: 326,
+    url: "https://speedcurve.com/",
+    username: "testuser",
+    password: "testpassword",
+  });
+
+  expect(response.status).toEqual("success");
+  expect(request.post.mock.calls[0][0].form.username).toEqual("testuser");
+  expect(request.post.mock.calls[0][0].form.password).toEqual("testpassword");
 });
 
 test("SpeedCurve.urls.update()", async () => {

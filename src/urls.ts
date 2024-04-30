@@ -31,6 +31,9 @@ export function create(key: string, options: CreateUrlOptions): Promise<CreateUr
     site_id: options.siteId,
     url: options.url,
     label: options.label,
+    script: options.script,
+    username: options.username,
+    password: options.password
   });
 }
 
